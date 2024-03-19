@@ -47,24 +47,26 @@ public class ProductController {
     //get by id
     @GetMapping("/{id}")
     public ResponseEntity<Object> getProductById(@PathVariable(value = "id") UUID id) {
-        //metódo JPA findById
-        Optional<ProductModel> product = productRepository.findById(id);
+
 
         if(!objectExists.exists(productRepository, id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
         }
 
+        //metódo JPA findById
+        Optional<ProductModel> product = productRepository.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(product.get());
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Object> updateProduct(@PathVariable(value = "id") UUID id,
         @RequestBody @Valid ProductRecordDto productRecordDto) {
-        //tentamos pegar o objeto com id respectivo
-        Optional<ProductModel> product = productRepository.findById(id); //tentamos encontrar o objeto na tabela
+
         if(!objectExists.exists(productRepository, id)){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
         }
+        //tentamos pegar o objeto com id respectivo
+        Optional<ProductModel> product = productRepository.findById(id); //tentamos encontrar o objeto na tabela
         ProductModel productModel = product.get();
         // passa os atributos vindos do Body para o objeto já existente que pegamos no db
         BeanUtils.copyProperties(productRecordDto, productModel);
@@ -74,10 +76,10 @@ public class ProductController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Object> deleteProduct(@PathVariable(value = "id") UUID id) {
-        Optional<ProductModel> product = productRepository.findById(id);
         if(!objectExists.exists(productRepository, id)){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
         }
+        Optional<ProductModel> product = productRepository.findById(id);
         productRepository.delete(product.get());
         return ResponseEntity.status(HttpStatus.OK).body("Product deleted sucessfully.");
     }

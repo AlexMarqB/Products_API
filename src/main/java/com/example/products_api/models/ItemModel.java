@@ -13,8 +13,12 @@ public class ItemModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID idItem;
-    private UUID productId;
+    @ManyToOne
+    @JoinColumn(name = "idProduct", referencedColumnName = "idProduct")
+    private ProductModel product;
     private UUID cartId;
+
+    private int quantity;
 
     public UUID getIdItem() {
         return idItem;
@@ -24,19 +28,27 @@ public class ItemModel implements Serializable {
         this.idItem = idItem;
     }
 
-    public UUID getProductId() {
-        return productId;
-    }
-
-    public void setProductId(UUID productId) {
-        this.productId = productId;
-    }
-
     public UUID getCartId() {
         return cartId;
     }
 
     public void setCartId(UUID cartId) {
         this.cartId = cartId;
+    }
+
+    public ProductModel getProduct() {
+        return product;
+    }
+
+    public void setProduct(ProductModel product) {
+        this.product = product;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }
